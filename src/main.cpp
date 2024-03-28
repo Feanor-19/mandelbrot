@@ -2,18 +2,32 @@
 #include "handlers.h"
 #include "image.h"
 #include "mandelbrot.h"
-#include "cmdargs.h"
+#include "settings.h"
 
 int main(int argc, char **argv)
 {
     Settings settings;
     parse_cmd_args(argc, argv, &settings);
+    SettingsStatus settings_status = check_settings( &settings );
+    if (settings_status != SETS_STATUS_OK)
+    {
+        print_settings_error( settings_status );
+        exit(settings_status);
+    }
+    print_settings( &settings );
 
-    // -------------------------------------------------------
+    if ( !settings.with_graphics )
+    {
+        exit(0);
+    }
 
-    sf::RenderWindow window(sf::VideoMode( DEFAULT_W_WIDTH, DEFAULT_W_HEIGHT ), W_NAME, 
-                            sf::Style::Titlebar | sf::Style::Close);
+    // --------------------------------------------------------------------------------
+    // graphics, no testing
     State state;
+    state_according_to_settings( &state, &settings );
+
+    sf::RenderWindow window(sf::VideoMode( state.window_width, state.window_height ), W_NAME, 
+                            sf::Style::Titlebar | sf::Style::Close);
 
     // drawing initial image
     init_image( state.window_width, state.window_height );

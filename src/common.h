@@ -12,7 +12,7 @@ const unsigned DEFAULT_W_WIDTH  = 800;
 const double DEFAULT_TOP_LEFT_X = -2.0;
 const double DEFAULT_TOP_LEFT_Y = 1.5;
 const double DEFAULT_STEP       = 2.0 / (DEFAULT_W_WIDTH / 2);
-u_int64_t DEFAULT_NUM_OF_TESTS  = 1000;
+const u_int64_t DEFAULT_NUM_OF_REPS  = 1000;
 
 
 const u_int8_t INFINITE_STEP_NUMBER = __UINT8_MAX__ - 1;
@@ -37,26 +37,26 @@ const sf::Keyboard::Key KEY_GOTO_ORIG   = sf::Keyboard::O;
 
 struct State
 {
-    const unsigned window_width   = DEFAULT_W_WIDTH;
-    const unsigned window_height  = DEFAULT_W_HEIGHT;
-    double top_left_x       = DEFAULT_TOP_LEFT_X;
-    double top_left_y       = DEFAULT_TOP_LEFT_Y;
-    double step             = DEFAULT_STEP;
+    unsigned window_width     = DEFAULT_W_WIDTH;
+    unsigned window_height    = DEFAULT_W_HEIGHT;
+    double top_left_x               = DEFAULT_TOP_LEFT_X;
+    double top_left_y               = DEFAULT_TOP_LEFT_Y;
+    double step                     = DEFAULT_STEP;
 };
 
 struct Settings
 {
     bool with_graphics = true;
-    struct TestParams
+    struct
     {
-        uid_t window_width      = DEFAULT_W_WIDTH;
+        uid_t window_width      = DEFAULT_W_WIDTH;  
         uid_t window_height     = DEFAULT_W_HEIGHT;
         double top_left_x       = DEFAULT_TOP_LEFT_X;
         double top_left_y       = DEFAULT_TOP_LEFT_Y;
         double step             = DEFAULT_STEP;
-        u_int64_t num_of_tests  = DEFAULT_NUM_OF_TESTS;
+        u_int64_t num_of_reps   = DEFAULT_NUM_OF_REPS;
         double death_radius     = DEFAULT_DEATH_RADIUS;
-    };
+    } test_params = {};
 
     //TODO - не забыть дополнять список
     bool test_0 = false;
