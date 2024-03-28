@@ -16,8 +16,14 @@
 //!     - total number of procesed points = image_width*image_height.
 //! Step:
 //!     - distance between two consecutive points 
-void calculate_image( unsigned image_width, unsigned image_height, 
-                      double top_left_x, double top_left_y, double step,
-                      void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) = NULL );
+//! @note This func must be used only in graphics mode, in testing mode alg's are called on their own.
+void calculate_image( State state, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) = NULL );
+
+//! //TODO description
+void alg_0( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+
+void alg_1( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+
+void alg_2( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
 
 #endif /* MANDELBROT */

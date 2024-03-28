@@ -4,6 +4,8 @@
 #include "mandelbrot.h"
 #include "settings.h"
 
+// TODO - санитайзер кидает сегфалт на совсем пустой файл?
+
 int main(int argc, char **argv)
 {
     Settings settings;
@@ -23,16 +25,14 @@ int main(int argc, char **argv)
 
     // --------------------------------------------------------------------------------
     // graphics, no testing
-    State state;
-    state_according_to_settings( &state, &settings );
+    State state = settings.test_params;
 
     sf::RenderWindow window(sf::VideoMode( state.window_width, state.window_height ), W_NAME, 
                             sf::Style::Titlebar | sf::Style::Close);
 
     // drawing initial image
     init_image( state.window_width, state.window_height );
-    calculate_image( state.window_width, state.window_height, state.top_left_x, 
-                     state.top_left_y, state.step, set_pixel_color );
+    calculate_image( state, set_pixel_color );
 
     sf::Texture window_texture;
     window_texture.loadFromImage( get_image() );
@@ -48,8 +48,7 @@ int main(int argc, char **argv)
         if ( handle_keyboard( &state ) )
         {
             init_image( state.window_width, state.window_height );
-            calculate_image( state.window_width, state.window_height, state.top_left_x, 
-                             state.top_left_y, state.step, set_pixel_color );
+            calculate_image( state, set_pixel_color );
             window_texture.update( get_image() );
         }
 

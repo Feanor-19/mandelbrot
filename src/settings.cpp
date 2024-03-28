@@ -7,8 +7,6 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
     assert(argv);
     assert(settings);
 
-    // TODO - random segfault в этой ф-ии при некоторых запусках
-
     int c = 0;
 
     while (1)
@@ -54,7 +52,7 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
                 break;
 
             case ID_NUM_OF_REPS:
-                if ( sscanf( optarg, "%lu", &settings->test_params.num_of_reps ) != 1 )
+                if ( sscanf( optarg, "%lu", &settings->num_of_reps ) != 1 )
                     printf( "--num-of-reps has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
@@ -119,18 +117,6 @@ void print_settings( const Settings *settings )
             settings->test_params.top_left_x,
             settings->test_params.top_left_y,
             settings->test_params.step,
-            settings->test_params.num_of_reps,
+            settings->num_of_reps,
             settings->test_params.death_radius);
-}
-
-void state_according_to_settings( State *state_ptr, const Settings *settings )
-{
-    assert(state_ptr);
-    assert(settings);
-
-    state_ptr->window_width     = settings->test_params.window_width;
-    state_ptr->window_height    = settings->test_params.window_height;
-    state_ptr->top_left_x       = settings->test_params.top_left_x;
-    state_ptr->top_left_y       = settings->test_params.top_left_y;
-    state_ptr->step             = settings->test_params.step;
 }

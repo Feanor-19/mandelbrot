@@ -37,30 +37,24 @@ const sf::Keyboard::Key KEY_GOTO_ORIG   = sf::Keyboard::O;
 
 struct State
 {
-    unsigned window_width     = DEFAULT_W_WIDTH;
-    unsigned window_height    = DEFAULT_W_HEIGHT;
-    double top_left_x               = DEFAULT_TOP_LEFT_X;
-    double top_left_y               = DEFAULT_TOP_LEFT_Y;
-    double step                     = DEFAULT_STEP;
+    unsigned window_width   = DEFAULT_W_WIDTH;
+    unsigned window_height  = DEFAULT_W_HEIGHT;
+    double top_left_x       = DEFAULT_TOP_LEFT_X;
+    double top_left_y       = DEFAULT_TOP_LEFT_Y;
+    double step             = DEFAULT_STEP;
+    double death_radius     = DEFAULT_DEATH_RADIUS;
 };
 
 struct Settings
 {
     bool with_graphics = true;
-    struct
-    {
-        uid_t window_width      = DEFAULT_W_WIDTH;  
-        uid_t window_height     = DEFAULT_W_HEIGHT;
-        double top_left_x       = DEFAULT_TOP_LEFT_X;
-        double top_left_y       = DEFAULT_TOP_LEFT_Y;
-        double step             = DEFAULT_STEP;
-        u_int64_t num_of_reps   = DEFAULT_NUM_OF_REPS;
-        double death_radius     = DEFAULT_DEATH_RADIUS;
-    } test_params = {};
+    State test_params = {};
+    
+    u_int64_t num_of_reps   = DEFAULT_NUM_OF_REPS;
 
     //TODO - не забыть дополнять список
-    bool test_0 = false;
-    // ... test1, test2... описания что значит в readme
+    bool alg_0 = false;
+    // ... alg_1, alg_2... описания что значит в readme
 };
 
 #endif /* MANDELBROT_COMMON_H */
