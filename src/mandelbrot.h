@@ -20,10 +20,12 @@
 void calculate_image( State state, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) = NULL );
 
 //! //TODO description
-void alg_single_dot( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+void alg_single_dot ( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
 
-void alg_vectors( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+void alg_vectors    ( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
 
-void alg_sse( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+void alg_sse        ( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
+
+void alg_avx        ( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) );
 
 #endif /* MANDELBROT */

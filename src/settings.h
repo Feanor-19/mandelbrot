@@ -21,6 +21,7 @@ enum LongOptionsIds
     ALG_SINGLE_DOT,
     ALG_VECTORS,
     ALG_SSE,
+    ALG_AVX,
 };
 
 struct option const long_options[] = 
@@ -37,6 +38,7 @@ struct option const long_options[] =
     {"alg-single-dot",  no_argument, 0, ALG_SINGLE_DOT},
     {"alg-vectors",     no_argument, 0, ALG_VECTORS   },
     {"alg-sse",         no_argument, 0, ALG_SSE       },
+    {"alg-avx",         no_argument, 0, ALG_AVX       },
     {0, 0, 0, 0}
 };
 

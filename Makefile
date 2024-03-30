@@ -14,8 +14,9 @@ CFLAGS  =	-D _DEBUG -ggdb3 -std=c++17 -Wall -Wextra -Weffc++ 								\
 			-Wno-missing-field-initializers -Wno-narrowing -Wno-old-style-cast -Wno-varargs 	\
 			-Wstack-protector -fcheck-new -fsized-deallocation -fstack-protector 				\
 			-fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer					\
-			-Wstack-usage=8192 -pie -fPIE -Werror=vla -fsanitize=alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
-
+			-Wstack-usage=8192 -pie -fPIE -Werror=vla 
+			
+SAN = -fsanitize=alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
 sanitize_banned = leak, address
 
 OBJ = obj
@@ -26,13 +27,15 @@ OUT = $(BIN)/mandelbrot
 SOURCES 		= $(wildcard $(SRC)/*.cpp)
 OBJFILES 		= $(patsubst $(SRC)/%,$(OBJ)/%,$(SOURCES:.cpp=.o))
 
-BASE_COMPILE	= $(CC) -o $@ $(CFLAGS) $^ -lsfml-graphics -lsfml-window -lsfml-system
+OPTIMIZE		= -O3
+BASE_LINK		= $(CC) -o $@ $(OPTIMIZE) $(CFLAGS) $^ -lsfml-graphics -lsfml-window -lsfml-system
+BASE_CMPL		= $(CC) -c $(OPTIMIZE) $(CFLAGS) -march=native -o $@ $<
 
 $(OUT) : $(OBJFILES)
-	$(BASE_COMPILE) -O1
+	$(BASE_LINK)
 
 $(OBJ)/%.o : $(SRC)/%.cpp
-	@$(CC) -c $(CFLAGS) -o $@ $<
+	@$(BASE_CMPL)
 
 .PHONY: clean
 clean:

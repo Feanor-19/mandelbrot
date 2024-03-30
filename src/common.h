@@ -59,6 +59,7 @@ struct Settings
     bool alg_single_dot     = false;
     bool alg_vectors        = false;
     bool alg_sse            = false;
+    bool alg_avx            = false;
 };
 
 #endif /* MANDELBROT_COMMON_H */

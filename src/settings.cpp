@@ -72,6 +72,9 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
             case ALG_SSE:
                 settings->alg_sse = true;
                 break;
+            case ALG_AVX:
+                settings->alg_avx = true;
+                break;
             case '?':
                 // getopt_long already printed an error message
                 break;

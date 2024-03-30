@@ -88,6 +88,11 @@ void run_tests( const Settings *settings )
         RUN_TEST( alg_sse );
     }
 
+    if ( settings->alg_all || settings->alg_avx )
+    {
+        RUN_TEST( alg_avx );
+    }
+
     if (no_tests_to_run)
         printf( "No tests were tasked to run. Use --alg-all to run all tests,"
                 "or see docs to learn which tests can be run on your machine.\n" );

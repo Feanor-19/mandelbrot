@@ -5,7 +5,7 @@ void calculate_image( State state, void (*ret_res)(unsigned i,unsigned j,u_int8_
 {
     // TODO - в state будет храниться алгоритм, который в данный момент используется в графическом режиме
     // и тут нужный вызывается
-    alg_sse( state, ret_res );
+    alg_avx( state, ret_res );
 }
 
 // ----------------------------- ALG_SINGLE_DOT -----------------------------------------
@@ -100,8 +100,8 @@ void alg_vectors( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_
 
 // ------------------------------------------------------------------------------------------------
 
-// ----------------------------------------- ALG_SSE ----------------------------------------------
 
+// ----------------------------------------- ALG_SSE ----------------------------------------------
 #include <emmintrin.h>
 
 void alg_sse( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
@@ -146,6 +146,58 @@ void alg_sse( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_numb
 
             if (ret_res)
                 foreach4 ret_res( pix_i, pix_j+i, *((u_int8_t*)&curr_step_n + i*sizeof(int)) );
+        }
+    }
+}
+
+// ------------------------------------------------------------------------------------------------
+
+// ----------------------------------------- ALG_AVX ----------------------------------------------
+#include <immintrin.h>
+
+void alg_avx( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
+{
+    const __m256d death_r_sqr = _mm256_set1_pd( st.death_radius*st.death_radius );
+    
+    const __m256d offsets = _mm256_set_pd(3., 2., 1., 0.);
+
+    for ( unsigned pix_i = 0; pix_i < st.window_height; pix_i++ )
+    {
+        double start_y_0 = (st.top_left_y - pix_i*st.step); //< axis 'i' points down
+        for ( unsigned pix_j = 0; pix_j < st.window_width; pix_j+=4 )
+        {
+            double start_x_0 = (st.top_left_x + pix_j*st.step);
+
+            __m256d start_x = _mm256_add_pd(_mm256_set1_pd(start_x_0), 
+                                            _mm256_mul_pd(offsets, _mm256_set1_pd(st.step)));
+            __m256d start_y = _mm256_set1_pd( start_y_0 );
+
+            __m256d curr_x  = start_x;
+            __m256d curr_y  = start_y;
+
+            __m256i curr_step_n = _mm256_setzero_si256();
+
+            for ( int step_n = 0; step_n < INFINITE_STEP_NUMBER; step_n++ )
+            {
+                __m256d curr_x_sqr = _mm256_mul_pd( curr_x, curr_x );
+                __m256d curr_y_sqr = _mm256_mul_pd( curr_y, curr_y );
+                __m256d curr_xy    = _mm256_mul_pd( curr_x, curr_y );
+                
+                __m256d mod_sqr = _mm256_add_pd( curr_x_sqr, curr_y_sqr ); 
+                
+                __m256d is_in_life_zone = _mm256_cmp_pd( mod_sqr, death_r_sqr, _CMP_LE_OS );
+
+                int mask = _mm256_movemask_pd( is_in_life_zone );
+                if (!mask) break;
+
+                curr_step_n = _mm256_sub_epi64(curr_step_n, _mm256_castpd_si256(is_in_life_zone));
+
+                curr_x = _mm256_add_pd( _mm256_sub_pd( curr_x_sqr, curr_y_sqr ), start_x );
+                curr_y = _mm256_add_pd( _mm256_add_pd( curr_xy, curr_xy ),       start_y );
+            }
+
+            if (ret_res)
+                foreach4 ret_res( pix_i, pix_j+i, *((u_int8_t*)&curr_step_n + i*sizeof(uint64_t)) );
         }
     }
 }
