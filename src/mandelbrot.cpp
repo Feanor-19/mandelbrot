@@ -5,10 +5,10 @@ void calculate_image( State state, void (*ret_res)(unsigned i,unsigned j,u_int8_
 {
     // TODO - в state будет храниться алгоритм, который в данный момент используется в графическом режиме
     // и тут нужный вызывается
-    alg_2( state, ret_res );
+    alg_sse( state, ret_res );
 }
 
-// ----------------------------- LEVEL OF OPTIMIZATION: 0 -----------------------------------------
+// ----------------------------- ALG_SINGLE_DOT -----------------------------------------
 
 //! @brief Calculates at which step number given point (start_x, start_y)
 //! enters dead zone. 
@@ -33,7 +33,7 @@ inline u_int8_t calc_step_number( double start_x, double start_y, double death_r
     return step_number;
 }
 
-void alg_0( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
+void alg_single_dot( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
 {
     for ( unsigned i = 0; i < st.window_height; i++ )
     {
@@ -49,11 +49,11 @@ void alg_0( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number
 
 // ------------------------------------------------------------------------------------------------
 
-// ----------------------------- LEVEL OF OPTIMIZATION: 1 -----------------------------------------
+// ------------------------------------- ALG_VECTORS ----------------------------------------------
 
 #define foreach4 for (unsigned i = 0; i < 4; i++)
 
-void alg_1( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
+void alg_vectors( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
 {
     for ( unsigned pix_i = 0; pix_i < st.window_height; pix_i++ )
     {
@@ -100,11 +100,11 @@ void alg_1( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number
 
 // ------------------------------------------------------------------------------------------------
 
-// ----------------------------- LEVEL OF OPTIMIZATION: 2 -----------------------------------------
+// ----------------------------------------- ALG_SSE ----------------------------------------------
 
 #include <emmintrin.h>
 
-void alg_2( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
+void alg_sse( State st, void (*ret_res)(unsigned i,unsigned j,u_int8_t step_number) )
 {
     const __m128 death_r_sqr = _mm_set_ps1( (float) (st.death_radius*st.death_radius) );
     

@@ -12,7 +12,7 @@ const unsigned DEFAULT_W_WIDTH  = 800;
 const double DEFAULT_TOP_LEFT_X = -2.0;
 const double DEFAULT_TOP_LEFT_Y = 1.5;
 const double DEFAULT_STEP       = 2.0 / (DEFAULT_W_WIDTH / 2);
-const u_int64_t DEFAULT_NUM_OF_REPS  = 1000;
+const u_int64_t DEFAULT_NUM_OF_REPS  = 100000;
 
 
 const u_int8_t INFINITE_STEP_NUMBER = __UINT8_MAX__ - 1;
@@ -47,14 +47,18 @@ struct State
 
 struct Settings
 {
-    bool with_graphics = true;
-    State test_params = {};
+    bool testing = false;
+    State params = {};
     
+    // Number of times each test is repeated to decrease error rate.
     u_int64_t num_of_reps   = DEFAULT_NUM_OF_REPS;
 
-    //TODO - не забыть дополнять список
-    bool alg_0 = false;
-    // ... alg_1, alg_2... описания что значит в readme
+    //NOTE - if 'alg_all' is true, all other 'alg_...''s values are ignored
+    bool alg_all = false; 
+
+    bool alg_single_dot     = false;
+    bool alg_vectors        = false;
+    bool alg_sse            = false;
 };
 
 #endif /* MANDELBROT_COMMON_H */

@@ -3,8 +3,7 @@
 #include "image.h"
 #include "mandelbrot.h"
 #include "settings.h"
-
-// TODO - санитайзер кидает сегфалт на совсем пустой файл?
+#include "testing.h"
 
 int main(int argc, char **argv)
 {
@@ -18,14 +17,15 @@ int main(int argc, char **argv)
     }
     print_settings( &settings );
 
-    if ( !settings.with_graphics )
+    if ( settings.testing )
     {
+        run_tests( &settings );
         exit(0);
     }
 
     // --------------------------------------------------------------------------------
     // graphics, no testing
-    State state = settings.test_params;
+    State state = settings.params;
 
     sf::RenderWindow window(sf::VideoMode( state.window_width, state.window_height ), W_NAME, 
                             sf::Style::Titlebar | sf::Style::Close);

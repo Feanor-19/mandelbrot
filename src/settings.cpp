@@ -23,31 +23,31 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
         switch (c)
         {
             case 't':
-                settings->with_graphics = false;
+                settings->testing = true;
                 break;
             
             case ID_W_WIDTH:
-                if ( sscanf( optarg, "%u", &settings->test_params.window_width ) != 1 )
+                if ( sscanf( optarg, "%u", &settings->params.window_width ) != 1 )
                     printf( "--w-width has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
             case ID_W_HEIGHT:
-                if ( sscanf( optarg, "%u", &settings->test_params.window_height ) != 1 )
+                if ( sscanf( optarg, "%u", &settings->params.window_height ) != 1 )
                     printf( "--w-height has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
             case ID_TOP_LEFT_X:
-                if ( sscanf( optarg, "%lf", &settings->test_params.top_left_x ) != 1 )
+                if ( sscanf( optarg, "%lf", &settings->params.top_left_x ) != 1 )
                     printf( "--top-left-x has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
             case ID_TOP_LEFT_Y:
-                if ( sscanf( optarg, "%lf", &settings->test_params.top_left_y ) != 1 )
+                if ( sscanf( optarg, "%lf", &settings->params.top_left_y ) != 1 )
                     printf( "--top-left-y has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
             case ID_STEP:
-                if ( sscanf( optarg, "%lf", &settings->test_params.step ) != 1 )
+                if ( sscanf( optarg, "%lf", &settings->params.step ) != 1 )
                     printf( "--step has a bad argument <%s>, setting it to default\n", optarg );
                 break;
 
@@ -57,8 +57,20 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
                 break;
 
             case ID_DEATH_RADIUS:
-                if ( sscanf( optarg, "%lf", &settings->test_params.death_radius ) != 1 )
+                if ( sscanf( optarg, "%lf", &settings->params.death_radius ) != 1 )
                     printf( "--death-radius has a bad argument <%s>, setting it to default\n", optarg );
+                break;
+            case ALG_ALL:
+                settings->alg_all = true;
+                break;
+            case ALG_SINGLE_DOT:
+                settings->alg_single_dot = true;
+                break;
+            case ALG_VECTORS:
+                settings->alg_vectors = true;
+                break;
+            case ALG_SSE:
+                settings->alg_sse = true;
                 break;
             case '?':
                 // getopt_long already printed an error message
@@ -82,7 +94,7 @@ void parse_cmd_args( int argc, char **argv, Settings *settings )
 
 SettingsStatus check_settings( const Settings *settings )
 {
-    if ( settings->test_params.window_width * settings->test_params.window_height % 4 != 0 )
+    if ( settings->params.window_width * settings->params.window_height % 4 != 0 )
         return SETS_STATUS_ERROR_WIDTH_MUL_HEIGHT_NOT_MULTIPLE_OF_4;
 
     return SETS_STATUS_OK;
@@ -110,13 +122,18 @@ void print_settings( const Settings *settings )
             "\tTop left corner's x coordinate: %lf\n"
             "\tTop left corner's y coordinate: %lf\n"
             "\tStep (size of one pixel): %lf\n"
-            "\tNumber of times a test will be repeated: %lu\n"
             "\tDeath raduis: %lf\n",
-            settings->test_params.window_width,
-            settings->test_params.window_height,
-            settings->test_params.top_left_x,
-            settings->test_params.top_left_y,
-            settings->test_params.step,
-            settings->num_of_reps,
-            settings->test_params.death_radius);
+            settings->params.window_width,
+            settings->params.window_height,
+            settings->params.top_left_x,
+            settings->params.top_left_y,
+            settings->params.step,
+            settings->params.death_radius);
+
+    if ( settings->testing )
+    {
+        printf( "Testing mode. Graphics won't be invoked.\n" );
+        printf( "\tNumber of times a test will be repeated: %lu\n",
+                settings->num_of_reps );
+    }
 }

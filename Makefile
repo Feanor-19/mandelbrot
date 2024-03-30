@@ -1,6 +1,6 @@
 CC=g++
 
-CFLAGS  =	-D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ 								\
+CFLAGS  =	-D _DEBUG -ggdb3 -std=c++17 -Wall -Wextra -Weffc++ 								\
 			-Waggressive-loop-optimizations -Wc++14-compat -Wmissing-declarations 				\
 			-Wcast-align -Wcast-qual -Wchar-subscripts -Wconditionally-supported 				\
 			-Wconversion -Wctor-dtor-privacy -Wempty-body -Wfloat-equal 						\
@@ -14,7 +14,9 @@ CFLAGS  =	-D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ 								\
 			-Wno-missing-field-initializers -Wno-narrowing -Wno-old-style-cast -Wno-varargs 	\
 			-Wstack-protector -fcheck-new -fsized-deallocation -fstack-protector 				\
 			-fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer					\
-			-Wstack-usage=8192 -pie -fPIE -Werror=vla 
+			-Wstack-usage=8192 -pie -fPIE -Werror=vla -fsanitize=alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
+
+sanitize_banned = leak, address
 
 OBJ = obj
 SRC = src
@@ -27,7 +29,7 @@ OBJFILES 		= $(patsubst $(SRC)/%,$(OBJ)/%,$(SOURCES:.cpp=.o))
 BASE_COMPILE	= $(CC) -o $@ $(CFLAGS) $^ -lsfml-graphics -lsfml-window -lsfml-system
 
 $(OUT) : $(OBJFILES)
-	$(BASE_COMPILE)
+	$(BASE_COMPILE) -O1
 
 $(OBJ)/%.o : $(SRC)/%.cpp
 	@$(CC) -c $(CFLAGS) -o $@ $<
