@@ -4,6 +4,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <time.h>
+
+
+// Used for FPS; time period at which FPS is calculated.
+const clock_t REF_CLOCKS = CLOCKS_PER_SEC * 0.5;
 
 const char* const W_NAME   = "Mandelbrot!"; 
 
@@ -13,7 +18,6 @@ const double DEFAULT_TOP_LEFT_X = -2.0;
 const double DEFAULT_TOP_LEFT_Y = 1.5;
 const double DEFAULT_STEP       = 2.0 / (DEFAULT_W_WIDTH / 2);
 const u_int64_t DEFAULT_NUM_OF_REPS  = 100000;
-
 
 const u_int8_t INFINITE_STEP_NUMBER = __UINT8_MAX__ - 1;
 

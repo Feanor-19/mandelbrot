@@ -5,7 +5,7 @@ void calculate_image( State state, void (*ret_res)(unsigned i,unsigned j,u_int8_
 {
     // TODO - в state будет храниться алгоритм, который в данный момент используется в графическом режиме
     // и тут нужный вызывается
-    alg_avx( state, ret_res );
+    alg_single_dot( state, ret_res );
 }
 
 // ----------------------------- ALG_SINGLE_DOT -----------------------------------------

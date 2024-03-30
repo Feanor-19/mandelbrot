@@ -40,6 +40,11 @@ int main(int argc, char **argv)
     sf::Sprite window_sprite;
     window_sprite.setTexture( window_texture );
 
+    // For FPS
+    clock_t last_clock = clock();
+    int64_t frames = 0;
+    printf( "FPS: % 10ld", frames );
+
     // main loop
     while (window.isOpen())
     {
@@ -54,6 +59,20 @@ int main(int argc, char **argv)
 
         window.draw( window_sprite );
         window.display();
+
+        clock_t curr_clock = clock();
+        if ( curr_clock - last_clock >= REF_CLOCKS )
+        {
+            printf( "\b\b\b\b\b\b\b\b\b\b% 10ld", frames * CLOCKS_PER_SEC / ( curr_clock - last_clock ) );
+            fflush(stdout);
+            last_clock = curr_clock;
+            frames = 0;
+        }
+        else
+        {
+            frames++;
+        }
     }
-    
+    // After FPS
+    putchar('\n');
 }
