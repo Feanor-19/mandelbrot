@@ -37,12 +37,8 @@ void handle_events( sf::Window &window, const State *state_ptr )
     }
 }
 
-bool handle_keyboard( State *state_ptr )
+void handle_keyboard( State *state_ptr )
 {
-    bool changes = false;
-
-    //REVIEW - как лучше организовать? что насчет return true в каждом if?
-
     double speed_mul = 1.0;
     if ( sf::Keyboard::isKeyPressed( KEY_SPEED ) )
         speed_mul = SPEED_MUL;
@@ -50,29 +46,21 @@ bool handle_keyboard( State *state_ptr )
     if ( sf::Keyboard::isKeyPressed( KEY_MOVE_UP ) )
     {
         state_ptr->top_left_y += state_ptr->step * speed_mul;
-        
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_MOVE_DOWN ) )
     {
         state_ptr->top_left_y -= state_ptr->step * speed_mul;
-        
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_MOVE_LEFT ) )
     {
         state_ptr->top_left_x -= state_ptr->step * speed_mul;
-        
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_MOVE_RIGHT ) )
     {
         state_ptr->top_left_x += state_ptr->step * speed_mul;
-        
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_ZOOM_IN ) )
@@ -83,8 +71,6 @@ bool handle_keyboard( State *state_ptr )
         state_ptr->step = new_step;
         state_ptr->top_left_x += ( old_step - new_step ) / 2.0 * state_ptr->window_width;
         state_ptr->top_left_y -= ( old_step - new_step ) / 2.0 * state_ptr->window_height;
-        
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_ZOOM_OUT ) )
@@ -95,8 +81,6 @@ bool handle_keyboard( State *state_ptr )
         state_ptr->step = new_step;
         state_ptr->top_left_x -= ( new_step - old_step ) / 2.0 * state_ptr->window_width;
         state_ptr->top_left_y += ( new_step - old_step ) / 2.0 * state_ptr->window_height;
- 
-        changes = true;
     }
 
     if ( sf::Keyboard::isKeyPressed( KEY_GOTO_ORIG ) )
@@ -104,9 +88,5 @@ bool handle_keyboard( State *state_ptr )
         state_ptr->step         = DEFAULT_STEP;
         state_ptr->top_left_x   = DEFAULT_TOP_LEFT_X;
         state_ptr->top_left_y   = DEFAULT_TOP_LEFT_Y;
-
-        changes = true;
     }
-
-    return changes;
 }

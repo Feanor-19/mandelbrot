@@ -8,7 +8,6 @@
 void handle_events( sf::Window &window, const State *state_ptr );
 
 //! @brief Handles keyboard, changes *state_ptr if needed.
-//! @return true if *state_ptr was changed, 0 otherwise.
-bool handle_keyboard( State *state_ptr );
+void handle_keyboard( State *state_ptr );
 
 #endif /* HANDLERS */
